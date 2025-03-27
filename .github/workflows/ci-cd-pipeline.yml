@@ -1,0 +1,35 @@
+name: Azure Web App Deployment
+
+on:
+  push:
+    branches:
+      - main  # Change this to your main branch name
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Log in to Docker Hub
+        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+
+      - name: Build Docker image
+        run: docker build -t flask-azure-app:latest .
+
+      - name: Push Docker image to Docker Hub
+        run: docker tag flask-azure-app:latest your-docker-username/flask-azure-app:latest &&
+             docker push your-docker-username/flask-azure-app:latest
+
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Deploy to Azure Web App
+        run: |
+          az webapp config container set --name flask-azure-ankith \
+          --resource-group flask-azure-group \
+          --docker-custom-image-name ankith100/flask-azure-app:latest
