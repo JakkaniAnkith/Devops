@@ -21,7 +21,7 @@ jobs:
 
       - name: Push Docker image to Docker Hub
         run: docker tag flask-azure-app:latest your-docker-username/flask-azure-app:latest &&
-             docker push your-docker-username/flask-azure-app:latest
+             docker push ankith100/flask-azure-app:latest
 
       - name: Azure Login
         uses: azure/login@v1
