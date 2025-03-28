@@ -23,6 +23,9 @@ jobs:
         run: docker tag flask-azure-app:latest ankith100/flask-azure-app:latest &&
              docker push ankith100/flask-azure-app:latest
 
+      - name: Debug Azure Credentials  # 👈 Add this step
+        run: echo '${{ secrets.AZURE_CREDENTIALS }}' | jq .
+
       - name: Azure Login
         uses: azure/login@v1
         with:
